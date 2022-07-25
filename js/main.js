@@ -10,7 +10,6 @@ maxScore = scores
 i+=1
 console.log("El record a batir es de " + scores)
 while((scores!=NaN) && (i<=amountOfGames) && (amountOfGames!=NaN)){
-    
     scores = parseInt(prompt("Ingrese el puntaje del partido numero " + (i)))
     if (scores<minScore){
         minScore=scores
