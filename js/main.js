@@ -1,31 +1,69 @@
-// Ejercicio complementario N1 - Crear un algoritmo utilizando un ciclo
-
-let minScore = 0
-let maxScore = 0
-let i = 1
-let amountOfGames = parseInt(prompt("Ingrese cuantos partidos de basket ha jugado esta temporada:"))
-let scores = parseInt(prompt("Ingrese el puntaje del partido numero " + (i)))
-minScore = scores
-maxScore = scores
-i+=1
-console.log("El record a batir es de " + scores)
-while((scores!=NaN) && (i<=amountOfGames) && (amountOfGames!=NaN)){
-    
-    scores = parseInt(prompt("Ingrese el puntaje del partido numero " + (i)))
-    if (scores<minScore){
-        minScore=scores
-        i+=1
-        console.log(minScore + " puntos en un partido fue el peor resultado de la temporada. A entrenar. Su record sigue siendo " + maxScore)
-    }else if(scores>maxScore){
-        maxScore=scores
-        i+=1
-        console.log("Ha batido su record de mayor cantidad de puntos en un partido habiendo anotando " + maxScore + " puntos")
-    }else if(scores<=maxScore && scores>=minScore){
-        i+=1
-        console.log("Ningun record se ha batido")
-    }else{
-        alert("Ingrese un valor numerico")
-        break
+// Simulador - Agenda grupal para coordinacion de citas
+class User {
+    constructor(usuario, contraseña) {
+        this.usuario = usuario
+        this.contraseña = contraseña
+        this.agenda ={}
     }
 }
-console.log("El record de mayor puntaje por partido fue de", maxScore + ".", "El menor puntaje que ha hecho en un partido fue de", minScore + ".")
+
+let users = {}
+
+// Genero la base de datos simulada
+function cargarUsuarios(){
+    let seguirCargando= true
+    let i = 0
+    while (seguirCargando) {
+        let nombreCompleto = validarDato(`Ingrese el nombre y el apellido del usuario N°${i+1}`)
+        let usuario = validarDato(`Escriba el usuario con el que ${nombreCompleto} quiere registrarse`)
+        alert("Su contraseña por este momento es 123456789 para evitarle llenar campos innecesarios")
+        let contraseña = 123456789
+        users[`${nombreCompleto}`] = new User (usuario, contraseña)
+        seguirCargando = confirm("¿Desea cargar otro usuario más para cruzar agendas?")
+        i++
+    }
+}
+
+// Chequea que se haya escrito algo en todos los campos
+function validarDato(mensaje){
+    let dato = prompt(mensaje)
+    while(dato==null || dato==""){
+        alert(`El valor ingresado no es válido.`)
+        dato = prompt(mensaje)
+    }
+    return dato
+}
+cargarUsuarios()
+
+// Cargar para cada usuario los horarios que tiene libre
+function cargarHorarios (){
+    for (let user in users){
+        let i = 0
+        console.log(`Agenda de ${user}\nUsuario:`,users[`${user}`].usuario,`Contraseña:`,users[`${user}`].contraseña)        
+        let seguirCargando = true     
+        while(seguirCargando){
+            let desde = validarDato(`Desde qué horario esta disponible ${user}?`)
+            let hasta = validarDato(`Hasta qué horario esta disponible ${user}?`)
+            users[`${user}`].agenda[`desde${i}`] = desde;
+            users[`${user}`].agenda[`hasta${i}`] = hasta;
+            console.log(`Estoy disponible de las`, users[`${user}`].agenda[`desde${i}`]+`hs`, `a`, users[`${user}`].agenda[`hasta${i}`]+`hs`)
+            i++
+            seguirCargando = confirm(`¿Desea seguir agregando horarios del usuario ${user}?`)
+        }
+    }
+}
+cargarHorarios()
+alert("Por consola se mostrará la disponibilidad de los usuarios ingresados:")
+console.log("DISPONIBILIDAD GRUPAL")
+
+// AGENDA GRUPAL PARA DESPUES CRUZAR LA INFORMACION
+function mostrarDisponibilidad(){
+    for (const user in users){
+        let disponibilidad = users[`${user}`].agenda
+        let amountOfKeys = Object.keys(disponibilidad).length
+        for (let i = 0; i < amountOfKeys/2; i++) {
+            console.log(`${user} puede desde las`, disponibilidad[`desde${i}`]+`hs`, `hasta las`, disponibilidad[`hasta${i}`]+`hs`)  
+        }
+    }
+}
+mostrarDisponibilidad()
