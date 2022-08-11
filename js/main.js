@@ -47,9 +47,19 @@ function eliminarUsuario(array){
         let input = prompt("Escriba el nombre del usuario que quiere borrar")
         let buscar = array.find((el) => el.usuario === input)
         let indice = array.indexOf(buscar)
+        while (buscar==undefined){
+            alert(`No se ha encontrado el usuario ${input}`)
+            input = prompt("Escriba el nombre del usuario que quiere borrar")
+            buscar = array.find((el) => el.usuario === input)
+            indice = array.indexOf(buscar)
+        }
         array.splice(indice,1)
         alert(`Se ha borrado el usuario ${buscar.usuario}`)
         console.clear()
+        if (users.length==0){
+            alert(`Ya no quedan usuarios cargados. Se le redirigirá al inicio`)
+            cargarUsuarios()
+        }
         eliminar = confirm("¿Desea eliminar otro mas?")
     }
     
