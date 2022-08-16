@@ -1,3 +1,115 @@
+// -----------------DOM Y EVENTS----------------
+
+// Elementos HTML
+const mesDiv = document.getElementById("mes-titulo")
+const añoDiv = document.getElementById("año-titulo")
+const botonSiguiente = document.getElementById("botonSiguiente")
+const botonAtras = document.getElementById("botonAtras")
+const fechasCalendario = document.getElementById("fechasCalendario")
+
+
+// Funciones de uso general a lo largo del proyecto:
+    // Me da el nombre entero de cualquier mes
+    function monthName(fecha){
+        return fecha.toLocaleDateString('default', { month: 'long' })
+    }
+    // Me da el nombre entero de cualquier dia de la semana
+    function dayName(fecha){
+        return fecha.toLocaleDateString('default', { weekday: 'long' })
+    }
+    // Me da el valor numerico de cuantos dias tiene un mes determinado
+    function daysInMonth(fecha){
+        let copiaDeFecha = new Date(fecha.valueOf())
+        copiaDeFecha.setDate(1)
+        copiaDeFecha.setMonth(copiaDeFecha.getMonth()+1)
+        copiaDeFecha.setDate(0)
+        return copiaDeFecha.getDate()
+    }
+    // Me da el indice del primer dia de la semana del mes Si es viernes, me devuelve 5
+    function primerDia(fecha){
+        let copiaDeFecha = new Date(fecha.valueOf())
+        return copiaDeFecha.getDay(copiaDeFecha.setDate(1))
+    }
+    // Me da el indice del ultimo dia de la semana del mes. X Ej: Si es viernes, me devuelve 5
+    function ultimoDia (fecha){
+        let copiaDeFecha = new Date(fecha.valueOf())
+        return copiaDeFecha.getDay(copiaDeFecha.setDate(daysInMonth(copiaDeFecha)))
+    }
+// 
+// FUNCIONES DEL PROYECTO
+// const fecha = new Date()
+function inicio(){
+    let hoy = new Date()
+    let mesActual = hoy.getMonth()
+    mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
+    añoDiv.innerText = `${hoy.getFullYear()}`
+    botonSiguiente.addEventListener("click",()=>{
+        if(mesActual>=11){
+            mesActual=0
+            hoy.setFullYear(hoy.getFullYear() + 1)
+        }else{
+        mesActual++
+        }
+        hoy.setMonth(mesActual)
+        mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
+        añoDiv.innerText = `${hoy.getFullYear()}`
+        fechasCalendario.innerHTML=``
+        crearCalendario(hoy)
+    })
+    botonAtras.addEventListener("click",()=>{
+        if(mesActual<=0){
+           mesActual=11
+            hoy.setFullYear(hoy.getFullYear() -1)
+        }else{
+        mesActual--
+        }
+        hoy.setMonth(mesActual)
+        mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
+        añoDiv.innerText = `${hoy.getFullYear()}`
+        fechasCalendario.innerHTML=``
+        crearCalendario(hoy)  
+    })
+    crearCalendario(hoy)
+}
+function crearCalendario(fecha){
+    fecha.setDate(1) //Importante: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia.
+    const hoy = new Date(fecha.valueOf())// Creo una segunda variable con el dia de hoy igual a la primera para poder trabajar sin que me pise los valores de la original
+    let cuadradosPrevios = primerDia(fecha)
+    let cuadradosPosteriores = 6 - ultimoDia(fecha)
+    for(let i = 0, j = 1; i<daysInMonth(fecha)+cuadradosPrevios+cuadradosPosteriores; i++, j++){
+        if(cuadradosPrevios==0){// Para los casos que no haya que crear cuadrados antes
+            if(j>daysInMonth(fecha)){//Pero sí hay que crear despues
+                hoy.setDate(1)
+                j=1
+                hoy.setMonth(fecha.getMonth()+1)
+            }
+            hoy.setDate(j)
+        }
+        else{// Para los casos que hay que crear cuadros antes   
+            hoy.setDate(1)
+            hoy.setMonth(fecha.getMonth()-1)
+            hoy.setDate(parseInt(daysInMonth(hoy))-cuadradosPrevios+j) //Esto asigna la fecha que se pinta primero en el calendario(de las que pertenecen al mes anterior y van en la misma fila en el calendario).
+            if(i-cuadradosPrevios==primerDia(hoy)){//Cuando terminé de crear los dias previos al primer dia
+                hoy.setDate(j-cuadradosPrevios)
+                hoy.setMonth(+1)
+            }
+        }
+        let div = document.createElement("div");
+		div.innerHTML = `<div class="border w-10">${hoy.getDate()}</div>`
+		fechasCalendario.appendChild(div);
+    }
+}
+
+
+
+
+
+
+inicio()
+
+
+
+// ----------------------------ENTREGAS PASADAS------------------------
 // Simulador - Agenda grupal para coordinacion de citas
 // FUNCIONES Y VARIABLES
 class User {
@@ -103,7 +215,9 @@ function cargarHorarios (){
     }
 }
 
+
+
 // Ejecucion
-cargarUsuarios()
-eliminarUsuario(users)
-cargarHorarios()
+// cargarUsuarios()
+// eliminarUsuario(users)
+// cargarHorarios()
