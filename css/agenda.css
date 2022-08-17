@@ -1,11 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-.w-10{
+.vw-10{
     width: 10vw
 }
-.w-70{
+.vw-70{
     width: 70vw;
+}
+.w-35{
+    width:35%
 }
 
 *{
     font-family:roboto; 
 }
+
+.diaActual{
+    font-weight:bold
+}
+.diaCalendario{
+    height: 4.5rem;
+}
+
+
+.boton {
+    transition-duration: 0.4s;
+    background-color: #000000c1; /* Green */
+    border: none;
+    color: white;
+    padding: .75rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+  }
+  
+  .boton:hover, .diaCalendario:hover {
+    background-color: #03a358;
+    color: white;
+  }
+  /* .diaCalendario:hover {
+    background-color: #2d836f; 
+    color: white;
+  } */

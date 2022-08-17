@@ -14,28 +14,49 @@
     
 </head>
 <body>
-    <h1 class="text-center">DESAFIO COMPLEMENTARIO: INTERACTUAR CON HTML</h1>
+    <!-- <h1 class="text-center">DESAFIO COMPLEMENTARIO: INTERACTUAR CON HTML</h1> -->
+
+    <div class="d-flex justify-content-center align-items-center ">
+        <div class=" w-35">
+            <div id="año-titulo" class="w-35"></div>
+            <div id="mes-titulo" class="w-35"></div>
+        </div>
+        <div class="w-35 text-end">
+            <!-- <div class="w-35"> -->
+                <button id="botonHoy" class="boton">Hoy</button>
+                <button id="botonAtras" class="boton"><</button>
+            <!-- </div> -->
+            <!-- <div class="w-35"> -->
+                <button id="botonSiguiente" class="boton" >></button>
+            <!-- </div> -->
+        </div>
+    </div>
     
-        <div class="text-center">
-            <div id="año-titulo"></div>
-            <div id="mes-titulo"></div>
-            <button id="botonAtras"><</button>
-            <button id="botonSiguiente">></button>
+    <div id="calendario" class="d-flex flex-column align-items-center">
+        <div class="vw-70 d-flex flex-row my-2 flex-wrap  text-center">
+            <div class="border vw-10">Domingo</div>
+            <div class="border vw-10">Lunes</div>
+            <div class="border vw-10">Martes</div>
+            <div class="border vw-10">Miercoles</div>
+            <div class="border vw-10">Jueves</div>
+            <div class="border vw-10">Viernes</div>
+            <div class="border vw-10">Sabado</div>
         </div>
-        
-        <div id="calendario" class="d-flex flex-column align-items-center">
-            <div class="w-70 d-flex flex-row my-2 flex-wrap  text-center">
-                <div class="border w-10">Domingo</div>
-                <div class="border w-10">Lunes</div>
-                <div class="border w-10">Martes</div>
-                <div class="border w-10">Miercoles</div>
-                <div class="border w-10">Jueves</div>
-                <div class="border w-10">Viernes</div>
-                <div class="border w-10">Sabado</div>
-            </div>
-            <div id="fechasCalendario" class="w-70 d-flex flex-row  m-2 flex-wrap  text-center"></div>
+        <div id="fechasCalendario" class="vw-70 d-flex flex-row  m-2 flex-wrap text-center "></div>
+    </div>
+
+    <!-- <div id="evento" class="d-flex flex-column justify-content-center w-35">
+        <input type="text" id="eventoNombre" placeholder="Ingrese un titulo">
+        <input type="date" id="eventoDia">
+        <div class="d-flex">
+            <input type="time" id="eventoDesde">
+            <input type="time" id="eventoHasta">
         </div>
-   
+        <div class="d-flex">
+            <button>Agregar</button>
+            <button>Cancelar</button>
+        </div>
+    </div> -->
     
 
     

@@ -1,14 +1,14 @@
 // -----------------DOM Y EVENTS----------------
 
 // Elementos HTML
-const mesDiv = document.getElementById("mes-titulo")
-const añoDiv = document.getElementById("año-titulo")
-const botonSiguiente = document.getElementById("botonSiguiente")
-const botonAtras = document.getElementById("botonAtras")
-const fechasCalendario = document.getElementById("fechasCalendario")
 
-
-// Funciones de uso general a lo largo del proyecto:
+const mesDiv = document.querySelector(`#mes-titulo`)
+const añoDiv = document.querySelector(`#año-titulo`)
+const botonSiguiente = document.querySelector(`#botonSiguiente`)
+const botonAtras = document.querySelector(`#botonAtras`)
+const botonHoy = document.querySelector(`#botonHoy`)
+const fechasCalendario = document.querySelector(`#fechasCalendario`)
+// Snippets
     // Me da el nombre entero de cualquier mes
     function monthName(fecha){
         return fecha.toLocaleDateString('default', { month: 'long' })
@@ -37,75 +37,89 @@ const fechasCalendario = document.getElementById("fechasCalendario")
     }
 // 
 // FUNCIONES DEL PROYECTO
-// const fecha = new Date()
+const hoy = new Date() 
+function calendario(copiaHoy){
+    mesDiv.innerText = `${monthName(copiaHoy).toUpperCase()}`
+    añoDiv.innerText = `${copiaHoy.getFullYear()}`
+    fechasCalendario.innerHTML=``
+    crearCuadricula(copiaHoy)
+    pintarHoy(hoy)
+}
+
 function inicio(){
-    let hoy = new Date()
-    let mesActual = hoy.getMonth()
-    mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
-    añoDiv.innerText = `${hoy.getFullYear()}`
+    let copiaHoy = new Date(hoy.valueOf())
+    let mesActual = copiaHoy.getMonth()
+    calendario(copiaHoy)
+    botonHoy.addEventListener("click",()=>{
+        copiaHoy = new Date(hoy.valueOf())
+        mesActual = hoy.getMonth()
+        calendario(copiaHoy)
+    })
     botonSiguiente.addEventListener("click",()=>{
         if(mesActual>=11){
             mesActual=0
-            hoy.setFullYear(hoy.getFullYear() + 1)
+            copiaHoy.setFullYear(copiaHoy.getFullYear() + 1)
         }else{
         mesActual++
         }
-        hoy.setMonth(mesActual)
-        mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
-        añoDiv.innerText = `${hoy.getFullYear()}`
-        fechasCalendario.innerHTML=``
-        crearCalendario(hoy)
+        copiaHoy.setMonth(mesActual)
+        calendario(copiaHoy)
     })
     botonAtras.addEventListener("click",()=>{
         if(mesActual<=0){
            mesActual=11
-            hoy.setFullYear(hoy.getFullYear() -1)
+            copiaHoy.setFullYear(copiaHoy.getFullYear() -1)
         }else{
         mesActual--
         }
-        hoy.setMonth(mesActual)
-        mesDiv.innerText = `${monthName(hoy).toUpperCase()}`
-        añoDiv.innerText = `${hoy.getFullYear()}`
-        fechasCalendario.innerHTML=``
-        crearCalendario(hoy)  
-    })
-    crearCalendario(hoy)
+        copiaHoy.setMonth(mesActual)
+        calendario(copiaHoy)
+    })    
 }
-function crearCalendario(fecha){
+
+// Crear el calendario especifico para cada mes y año
+function crearCuadricula(fecha){
     fecha.setDate(1) //Importante: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia.
-    const hoy = new Date(fecha.valueOf())// Creo una segunda variable con el dia de hoy igual a la primera para poder trabajar sin que me pise los valores de la original
+    const copiaFecha = new Date(fecha.valueOf())// Creo una segunda variable con el dia de hoy igual a la primera para poder trabajar sin que me pise los valores de la original
     let cuadradosPrevios = primerDia(fecha)
     let cuadradosPosteriores = 6 - ultimoDia(fecha)
     for(let i = 0, j = 1; i<daysInMonth(fecha)+cuadradosPrevios+cuadradosPosteriores; i++, j++){
         if(cuadradosPrevios==0){// Para los casos que no haya que crear cuadrados antes
             if(j>daysInMonth(fecha)){//Pero sí hay que crear despues
-                hoy.setDate(1)
+                copiaFecha.setDate(1)
                 j=1
-                hoy.setMonth(fecha.getMonth()+1)
+                copiaFecha.setMonth(fecha.getMonth()+1)
+                pintarHoy(copiaFecha)
             }
-            hoy.setDate(j)
+            copiaFecha.setDate(j)
         }
         else{// Para los casos que hay que crear cuadros antes   
-            hoy.setDate(1)
-            hoy.setMonth(fecha.getMonth()-1)
-            hoy.setDate(parseInt(daysInMonth(hoy))-cuadradosPrevios+j) //Esto asigna la fecha que se pinta primero en el calendario(de las que pertenecen al mes anterior y van en la misma fila en el calendario).
-            if(i-cuadradosPrevios==primerDia(hoy)){//Cuando terminé de crear los dias previos al primer dia
-                hoy.setDate(j-cuadradosPrevios)
-                hoy.setMonth(+1)
+            copiaFecha.setDate(1)
+            copiaFecha.setMonth(fecha.getMonth()-1)
+            copiaFecha.setDate(parseInt(daysInMonth(copiaFecha))-cuadradosPrevios+j) //Esto asigna la fecha que se pinta primero en el calendario(de las que pertenecen al mes anterior y van en la misma fila en el calendario).
+            if(i-cuadradosPrevios==primerDia(copiaFecha)){//Cuando terminé de crear los dias previos al primer dia
+                copiaFecha.setDate(j-cuadradosPrevios)
+                copiaFecha.setMonth(+1)
             }
         }
         let div = document.createElement("div");
-		div.innerHTML = `<div class="border w-10">${hoy.getDate()}</div>`
+		div.innerHTML = `<div id="${copiaFecha.valueOf()}" class="diaCalendario border vw-10">${copiaFecha.getDate()}</div>`
 		fechasCalendario.appendChild(div);
     }
 }
+// Pintar el dia actual
+function pintarHoy(fecha){
+    const diasCalendario = document.querySelectorAll(`.diaCalendario`)
+    diasCalendario.forEach((div)=>{
+        if(fecha.valueOf()==div.id){
+            div.classList.add("diaActual"); 
+}})}
 
+// Crear un evento
 
-
-
-
-
+// Inicializacion de funciones
 inicio()
+
 
 
 
