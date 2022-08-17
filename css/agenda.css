@@ -13,8 +13,12 @@
     font-family:roboto; 
 }
 
+nav{
+    height:10vh;
+}
 .diaActual{
-    font-weight:bold
+    font-weight: bolder;
+    font-size: large;
 }
 .diaCalendario{
     height: 4.5rem;
@@ -41,3 +45,26 @@
     background-color: #2d836f; 
     color: white;
   } */
+
+#pestañaEvento{
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    z-index: 10%;
+    width: 50%;
+    height: 60%;
+    display: none;
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+  body{
+    background-color: #ffffff ;
+  }
+
+  #año-titulo{
+    font-size: 40px;
+    height: 100%;
+  }
+  #mes-titulo{
+    height:100%;
+  }
