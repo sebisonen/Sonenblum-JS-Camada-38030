@@ -13,7 +13,7 @@
     font-family:roboto; 
 }
 
-nav{
+#index nav{
     height:10vh;
 }
 .diaActual{
@@ -57,7 +57,7 @@ nav{
     background-color: #ffffff;
     border-radius: 10px;
   }
-  body{
+  #index{
     background-color: #ffffff ;
   }
 
@@ -68,3 +68,37 @@ nav{
   #mes-titulo{
     height:100%;
   }
+
+  .calendarBar{
+    margin: 0 15vw;
+  }
+
+  /* Login/Register */
+#login{
+  padding-top:5%;
+}
+#forms{
+  width:100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+#nav{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center
+  
+}
+#login li{
+  width:10%;
+}
+
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+  /* color: black; */
+  background-color: #000000d8;
+}
