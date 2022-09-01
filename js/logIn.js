@@ -63,7 +63,7 @@ signIn.addEventListener("click", (e)=>{
         if(rememberMe.checked){
             sessionStorage.setItem("usuarioActual", usuario.usuario)
         }
-        window.location.href='../html/agenda.html'
+        window.location.href='html/agenda.html'
     }else{
         Swal.fire({
             position: 'center',
