@@ -65,7 +65,13 @@ signIn.addEventListener("click", (e)=>{
         }
         window.location.href='../html/agenda.html'
     }else{
-        alert("usuario no encontrado")
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Usuario no encontrado',
+            showConfirmButton: false,
+            timer: 1700
+          })
     }    
 })
 
@@ -79,7 +85,13 @@ signUp.addEventListener("click", (e)=>{
     users.push(nuevoUsuario)
     sessionStorage.setItem("usuarios", JSON.stringify(users))
     console.log(users)
-    alert("usuario creado")
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Usuario creado con éxito',
+        showConfirmButton: true,
+        // timer: 1500
+      })
     
 })
 

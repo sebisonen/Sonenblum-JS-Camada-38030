@@ -110,6 +110,7 @@ function calendario(copiaHoy){
     añoDiv.innerText = `${copiaHoy.getFullYear()}`
     fechasCalendario.innerHTML=``
     crearCuadricula(copiaHoy)
+    
     resaltarHoy(hoy)
 }
 
@@ -121,6 +122,7 @@ function resaltarHoy(fecha){
             div.classList.add("diaActual"); 
     }})
 }
+
 
 // Crear el calendario especifico segun las particularidades de cada mes y año
 function crearCuadricula(fecha){
@@ -218,6 +220,7 @@ function agendarEvento(e){
             hasta:hasta,
             informacion: eventoDetalle.value,
         }
+        
         usuarioActual.agenda.push(eventoCreado)
         sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
         //Hago que se cierre la ventana
@@ -289,8 +292,11 @@ monthButton.addEventListener("click",()=>{
 // informacion: "Organizar fiesta"})
 
 
-// Inicializacion de funciones
 
+
+
+
+// Inicializacion de funciones
 inicio()
 eventoToggle()
 
@@ -303,3 +309,14 @@ eventoToggle()
 // Crear eventos que duren mas de un dia. Desde y hasta tambien con la fecha y no solo horas.
 // Interconexion entre usuarios. Distintas funcionalidades: agregar amigo (buscador de usuarios). Crear evento con mi amigo, etc
 // Eliminar eventos y usuarios
+
+
+// CORRECCION:
+// Si entras directo a la url de la agenda sin estar logueado, no deberia dejarte, podes hacer una redireccion.
+
+// Los datos que guardas en session storage, quizas deberias guardarlos en local storage, como por ejemplo los datos del registro o la agenda.
+
+// La agenda cuando guardas algo, si recargas, reemplaza lo que ya tenias. Estaria bueno que se sume y que se puedan eliminar o editar lo agregado a la agenda.
+// Esto es similar a lo de usuario. Cuando refresco el array interno de JS se vacia. Por eso no puede guardar lo anterior.
+
+// No deberia dejar agendar cosas para dias o horas del dia de hoy que ya pasaron, incluso podrias poner los dias que ya pasaron en un gris mas oscuro y bloquear los botones.
