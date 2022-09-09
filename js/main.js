@@ -110,7 +110,6 @@ function calendario(copiaHoy){
     añoDiv.innerText = `${copiaHoy.getFullYear()}`
     fechasCalendario.innerHTML=``
     crearCuadricula(copiaHoy)
-    
     resaltarHoy(hoy)
 }
 

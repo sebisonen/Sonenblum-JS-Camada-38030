@@ -95,4 +95,61 @@ signUp.addEventListener("click", (e)=>{
     
 })
 
+// Comment cards
+const comentarios= document.querySelector(`#comentarios`)
+let db = []
+function datosTesimonios(){
 
+    fetch('https://631a30c0dc236c0b1ed938be.mockapi.io/testimony') 
+        .then((response) =>  response.json()) 
+        .then((data) =>{
+            db = data
+            crearCardsTestimonios()
+            
+        }) 
+        .catch((error)=>console.error("Se produjo un error: ", error))
+}
+
+
+function crearCardsTestimonios(){
+    db.forEach((e)=>{
+        // Por cada uno creo un div
+        let div = document.createElement("div")
+        div.classList.add("col-md-4", "mb-5", "mb-md-0")
+        // div.classList.add("d-flex flex-row")
+        // div.innerHTML = `<div class="card w-75 h-100">
+        //                     <img class="card-img-top" src="${e.avatar}" alt="Card image cap">
+        //                     <div class="card-body">
+        //                     <h5 class="card-title">${e.nombre} ${e.apellido}</h5>
+        //                     <p class="card-text">"${e.testimonio}"</p>
+        //                     </div>
+        //                 </div>`
+        div.innerHTML=`
+        <div class="row d-flex justify-content-center mb-4">
+        <img src="${e.avatar}"
+            class="rounded-circle shadow-1-strong w-25" />
+        </div>
+        <h5 class="mb-3">${e.nombre} ${e.apellido}</h5>
+        <h6 class="text-primary mb-3">${e.trabajo}</h6>
+        <p class="px-xl-3">
+        <i class="fas fa-quote-left pe-2"></i>${e.testimonio}
+        </p>
+    `
+        comentarios.appendChild(div)
+    })
+}
+datosTesimonios()
+
+// `
+// <div class="col-md-4 mb-5 mb-md-0">
+//     <div class="d-flex justify-content-center mb-4">
+//     <img src="${e.avatar}"
+//         class="rounded-circle shadow-1-strong" width="150" height="150" />
+//     </div>
+//     <h5 class="mb-3">${e.nombre} ${e.apellido}</h5>
+//     <h6 class="text-primary mb-3">${e.trabajo}</h6>
+//     <p class="px-xl-3">
+//     <i class="fas fa-quote-left pe-2"></i>${e.testimonio}
+//     </p>
+// </div>
+// `
