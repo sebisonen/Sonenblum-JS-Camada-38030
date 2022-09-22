@@ -162,13 +162,24 @@ function crearCardsTestimonios(){
 }
 datosTesimonios()
 // Prueba con fetch
-// fetch('https://jsonplaceholder.typicode.com/posts', {
-//   method: 'POST',
-//   body: JSON.stringify(users),
-//   headers: {
-//     'Content-type': 'application/json; charset=UTF-8',
-//   },
-// })
-//   .then((response) => response.json())
-//   .then((json) => console.log(json));
+
+fetch('https://jsonplaceholder.typicode.com/posts', {
+  method: 'POST',
+  body: JSON.stringify(users),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+})
+  .then((response) => response.json())
+  .then((json) => console.log("fetch post: users" json));
+
+  let usersPRUEBA =[]
+  fetch('https://jsonplaceholder.typicode.com/posts') 
+        .then((response) =>  response.json()) 
+        .then((data) =>{
+            usersPRUEBA = data 
+            console.log(`fetch get: users: ${usersPRUEBA}`)           
+        })
+        .catch((error)=>console.error("Se produjo un error: ", error))
+
 
