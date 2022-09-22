@@ -125,6 +125,7 @@ function calendario(copiaHoy){
 // Darle un detalle al dia actual
 function resaltarHoy(fecha){
     const diasCalendario = document.querySelectorAll(`.diaCalendario`)
+    
     diasCalendario.forEach((div)=>{
         if(fecha.valueOf()==div.id){
             div.classList.add("diaActual"); 
@@ -319,29 +320,11 @@ monthButton.addEventListener("click",()=>{
     navBar.classList.add("d-flex")
     navBar.classList.remove("d-none")
 })
-// usuarioActual.agenda.push( {
-//     tíulo: "La rosalia",
-//     desde: new Date(2022, 7, 25, 20, 30),
-//     hasta: new Date(2022, 7, 25, 23, 30),
-//     informacion: "motomami motomami"
-// },
-// {    tíulo: "Cumpleaños",
-// desde: new Date(2023, 1, 25, 00, 00),
-// hasta: new Date(2023, 1, 25, 23, 59),
-// informacion: "Organizar fiesta"})
-
-
-
-
-
 
 // Inicializacion de funciones
 inicio()
 eventoToggle()
-let prueba = new Date()
-prueba.setFullYear(2023)
-prueba.setDate(2)
-console.log(prueba)
+
 
 // pendiente:
 

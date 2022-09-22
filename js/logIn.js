@@ -123,7 +123,7 @@ let registerUsername = document.querySelector(`#registerUsername`)
 let registerEmail = document.querySelector(`#registerEmail`)
 let registerPassword = document.querySelector(`#registerPassword`)
 let registerRepeatPassword = document.querySelector(`#registerRepeatPassword`)
-let registerFields = document.querySelector('#registerForm').querySelectorAll(`.form-outline`)//NODE LIST DE TODOS LOS CAMPOS
+let registerFields = registerForm.querySelectorAll(`.form-outline`)//NODE LIST DE TODOS LOS CAMPOS
 
 
 // Seccion testimonios
