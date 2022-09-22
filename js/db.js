@@ -9,5 +9,7 @@ class User {
     }
 }
 let users = []
+
+//Aca van a estar guardados todos los datos de los usuarios. Acá se aloja la db simulada.
 const users__storage = JSON.parse(sessionStorage.getItem("usuarios"))
 

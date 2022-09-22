@@ -7,11 +7,11 @@ const loginForm = document.querySelector(`#pills-login`)
 const tabLogin =document.querySelector(`#tab-login`)
 
 if(users__storage!=null){users=users__storage}
-// logIn.html carga. Botones y display de los formularios
+
+// Index: Botones y display de los formularios
 function activar(divMostrarID, divOcultarID){
     let divMostrar = document.querySelector(`#${divMostrarID}`)
     let divOcultar = document.querySelector(`#${divOcultarID}`)
-
     divMostrar.classList.add("active");
     divOcultar.classList.remove("active");
     
@@ -33,9 +33,7 @@ loginButton.addEventListener("click", (e)=>{
     activar("tab-login","tab-register")
     mostrarDiv("#pills-login","#pills-register")
     e.preventDefault()
-    
 })
-
 
 registerLink.addEventListener("click", (e)=>{
     tabLogin.classList.remove("active")
@@ -78,24 +76,57 @@ signIn.addEventListener("click", (e)=>{
 // Register form
 const signUp = document.querySelector(`#signUp-button`)
 const registerInputs = registerForm.querySelectorAll(`input`)
+// Event para el boton de signUP:
 signUp.addEventListener("click", (e)=>{
     e.preventDefault()
-//     registerInputs.forEach((input)=>console.log(input.value))
-    let nuevoUsuario = new User (registerInputs[0].value, registerInputs[2].value, registerInputs[1].value, registerInputs[3].value)
-    users.push(nuevoUsuario)
-    sessionStorage.setItem("usuarios", JSON.stringify(users))
-    console.log(users)
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Usuario creado con éxito',
-        showConfirmButton: true,
-        // timer: 1500
-      })
+    let validacion = validarNombre(registerName)&&validarUsuario(registerUsername)&&validarEmail(registerEmail) && validarContraseña(registerPassword) && validarContraseñaRepetida(registerRepeatPassword)
+
+    if (validacion){
+        // Cargar a base de datos el usuario
+        let nuevoUsuario = new User (registerName.value.replace(/\s+/g,' ').trim(),
+                                    registerEmail.value,
+                                    registerUsername.value,
+                                    registerPassword.value)
+        users.push(nuevoUsuario)
+        sessionStorage.setItem("usuarios", JSON.stringify(users))
+        // Mostrar alerta
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Usuario creado con éxito',
+            showConfirmButton: true,
+            confirmButtonColor: "#000000c1",
+
+        }).then(()=>{//Redirigir a la pagina
+            localStorage.setItem("usuarioActual", nuevoUsuario.usuario)
+            window.location.href='html/agenda.html'
+        })
+
+    }else{
+        // Sino: valido todos los datos hasta que la variable validacion sea true
+        validarNombre(registerName)
+        validarUsuario(registerUsername)
+        validarEmail(registerEmail)
+        validarContraseña(registerPassword)
+        validarContraseñaRepetida(registerRepeatPassword)
+        registerFields.forEach((elementoHTML)=>{
+            campoVacio(elementoHTML.firstElementChild)?crearDivError(elementoHTML.firstElementChild, `Este campo es obligatorio`):noModificarDivError(elementoHTML)
+            !huboError(elementoHTML.firstElementChild)?eliminarDivError(elementoHTML.firstElementChild):noModificarDivError(elementoHTML)
+        })
     
+    }
 })
 
-// Comment cards
+// Variables para validaciones
+let registerName = document.querySelector(`#registerName`)
+let registerUsername = document.querySelector(`#registerUsername`)
+let registerEmail = document.querySelector(`#registerEmail`)
+let registerPassword = document.querySelector(`#registerPassword`)
+let registerRepeatPassword = document.querySelector(`#registerRepeatPassword`)
+let registerFields = document.querySelector('#registerForm').querySelectorAll(`.form-outline`)//NODE LIST DE TODOS LOS CAMPOS
+
+
+// Seccion testimonios
 const comentarios= document.querySelector(`#comentarios`)
 let db = []
 function datosTesimonios(){
@@ -116,40 +147,28 @@ function crearCardsTestimonios(){
         // Por cada uno creo un div
         let div = document.createElement("div")
         div.classList.add("col-md-4", "mb-5", "mb-md-0")
-        // div.classList.add("d-flex flex-row")
-        // div.innerHTML = `<div class="card w-75 h-100">
-        //                     <img class="card-img-top" src="${e.avatar}" alt="Card image cap">
-        //                     <div class="card-body">
-        //                     <h5 class="card-title">${e.nombre} ${e.apellido}</h5>
-        //                     <p class="card-text">"${e.testimonio}"</p>
-        //                     </div>
-        //                 </div>`
         div.innerHTML=`
-        <div class="row d-flex justify-content-center mb-4">
-        <img src="${e.avatar}"
-            class="rounded-circle shadow-1-strong w-25" />
-        </div>
-        <h5 class="mb-3">${e.nombre} ${e.apellido}</h5>
-        <h6 class="text-primary mb-3">${e.trabajo}</h6>
-        <p class="px-xl-3">
-        <i class="fas fa-quote-left pe-2"></i>${e.testimonio}
-        </p>
-    `
+                        <div class="row d-flex justify-content-center mb-4">
+                            <img src="${e.avatar}" class="rounded-circle shadow-1-strong w-25" />
+                        </div>
+                        <h5 class="mb-3">${e.nombre} ${e.apellido}</h5>
+                        <h6 class="text-primary mb-3">${e.trabajo}</h6>
+                        <p class="px-xl-3">
+                            <i class="fas fa-quote-left pe-2"></i>${e.testimonio}
+                        </p>
+                    `
         comentarios.appendChild(div)
     })
 }
 datosTesimonios()
+// Prueba con fetch
+// fetch('https://jsonplaceholder.typicode.com/posts', {
+//   method: 'POST',
+//   body: JSON.stringify(users),
+//   headers: {
+//     'Content-type': 'application/json; charset=UTF-8',
+//   },
+// })
+//   .then((response) => response.json())
+//   .then((json) => console.log(json));
 
-// `
-// <div class="col-md-4 mb-5 mb-md-0">
-//     <div class="d-flex justify-content-center mb-4">
-//     <img src="${e.avatar}"
-//         class="rounded-circle shadow-1-strong" width="150" height="150" />
-//     </div>
-//     <h5 class="mb-3">${e.nombre} ${e.apellido}</h5>
-//     <h6 class="text-primary mb-3">${e.trabajo}</h6>
-//     <p class="px-xl-3">
-//     <i class="fas fa-quote-left pe-2"></i>${e.testimonio}
-//     </p>
-// </div>
-// `

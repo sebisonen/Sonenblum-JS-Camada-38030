@@ -1,4 +1,6 @@
 if(users__storage.length!=0){users=users__storage}
+
+
 // Elementos HTML
 // index
 const index = document.querySelector(`#index`)
@@ -52,14 +54,21 @@ const index = document.querySelector(`#index`)
     const hhmm = (fecha)=>{
         return fecha.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
     }
+    function redondearA15Minutos(fecha) {
+        const minutos = 15;
+        const ms = 1000 * 60 * minutos;
+      
+        return new Date(Math.ceil(fecha.getTime() / ms) * ms);
+    }
     // Storage
     const usuarioActual__storage = localStorage.getItem("usuarioActual")
     const usuarioActual = users.find((el)=> usuarioActual__storage==el.usuario)
-
+    const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
+    usuarioActual.agenda=agenda__Storage||[]
     const parseDate = (string) =>{
         let date = new Date (string)
         return date 
-}
+    }
     // DOM
     function activar(divMostrarID, divOcultarID){
         let divMostrar = document.querySelector(`#${divMostrarID}`)
@@ -125,8 +134,9 @@ function resaltarHoy(fecha){
 
 // Crear el calendario especifico segun las particularidades de cada mes y año
 function crearCuadricula(fecha){
-    fecha.setDate(1) //Importante: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia.
-    const copiaFecha = new Date(fecha.valueOf())// Creo una segunda variable con el dia de hoy que sea igual a la primera: para poder trabajar sin que me pise los valores de la original
+    fecha.setDate(1) //Fecha de referencia estática por cada mes: el primero de cada mes. (Explicacion: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia.9
+    hoy.setHours(0,0,0,0)
+    const copiaFecha = new Date(fecha.valueOf())// Creo una segunda variable igual a la primera: es la que va a ir cambiando en funcion de cada cuadrado-calendario
     let cuadradosPrevios = primerDia(fecha)
     let cuadradosPosteriores = 6 - ultimoDia(fecha)
     for(let i = 0, j = 1; i<daysInMonth(fecha)+cuadradosPrevios+cuadradosPosteriores; i++, j++){
@@ -137,46 +147,61 @@ function crearCuadricula(fecha){
                 copiaFecha.setMonth(fecha.getMonth()+1)
             }
             copiaFecha.setDate(j)
-        }
-        else{// Para los casos que hay que crear cuadros antes   
+        }else{// Para los casos que hay que crear cuadros antes
+              
             copiaFecha.setDate(1)
-            copiaFecha.setMonth(fecha.getMonth()-1)
-            copiaFecha.setDate(parseInt(daysInMonth(copiaFecha))-cuadradosPrevios+j) //Esto me dice cual es el valor del primer cuadrado a pintar.
-            if(i-cuadradosPrevios==primerDia(copiaFecha)){//Cuando terminé de crear los dias previos al primer dia:
-                copiaFecha.setDate(j-cuadradosPrevios)//Reinicio el valor del dia que voy a crear
-                copiaFecha.setMonth(+1)
+            if (fecha.getMonth()==0){// Creando enero (cuando se manejan dos años distintos en la creacion)
+                copiaFecha.setMonth(11)
+                copiaFecha.setFullYear(fecha.getFullYear()-1)
             }
+            else{//El resto de los meses que no son Enero
+                copiaFecha.setMonth(fecha.getMonth()-1)}
+                copiaFecha.setDate(parseInt(daysInMonth(copiaFecha))-cuadradosPrevios+j) //Esto me dice cual es el valor del primer cuadrado a pintar.
+                if(fecha.getMonth()==11&&copiaFecha.getMonth()==0){//Cuando tengo que crear los cuadrados posteriores de diciembre
+                    copiaFecha.setFullYear(fecha.getFullYear()+1)
+                }
         }
-        //Creo los div
+        //Creo los div con sus clases correspondientes. A los anteriores al dia actual no permito agendar.
         let div = document.createElement("div");
 		div.innerHTML = `<div id="${copiaFecha.valueOf()}" class="diaCalendario border vw-10">${copiaFecha.getDate()}</div>`
 		fechasCalendario.appendChild(div);
+        hoy.valueOf()<=div.firstElementChild.id?div.firstElementChild.classList.add("enabled"):div.firstElementChild.classList.add("disabled")
     }
+    
     eventoToggle()//Abrir ventana de agendar un evento. NOTA: Si o si se inicializa aca. Sino queda por fuera de los eventos
     
 }
 
 // Cuando clickeo un div que se visualice el menu para agendar un evento
 function eventoToggle(){ //Se activa cuando clickeo una fecha especifica
-    const diasCalendario = document.querySelectorAll(`.diaCalendario`)
+    const diasCalendario = document.querySelectorAll(`.enabled`)
     diasCalendario.forEach((div) =>{
         div.addEventListener("click", (e)=>{//Por cada dia del calendario creo la posibilidad de agendar un nuevo evento en aquel que clickee
             // Formateos de fecha para poder poner placeholders en forma de values
             let date = new Date(parseInt(div.id));
             let valueEventoDia = new Date(parseInt(div.id)).toISOString().split('T')[0]
-            let value= date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            let value= redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             date.setHours(date.getHours() + 1)
-            let value2 = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            let value2 = redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
 
             pestañaEvento.style.display = "block"//Que se vea el menu
             pestañaEvento.innerHTML = `
                 <div id="evento" class="d-flex flex-column justify-content-center w-100 h-100 p-3 gap-3">
                     <h2> Agende un evento </h2>
-                    <input type="text" id="eventoNombre" placeholder="Ingrese un titulo">
+                    <div>
+                        <input type="text" id="eventoNombre" placeholder="Ingrese un titulo">
+                        <div class="error-div text-danger"></div>
+                    </div>
+                    <div>
                     <input type="date" id="eventoDia" value="${valueEventoDia}">
+                        <div class="error-div text-danger"></div>
+                    </div>                    
                     <div class="d-flex">
                         <input type="time" id="eventoDesde" value="${value}">
+                        
                         <input type="time" id="eventoHasta" value="${value2}">
+                        
+                        <div class=" mx-5 error-div text-danger"></div>
                     </div>
                     <input id="eventoDetalle" type="text" placeholder="Agregar informacion">
                     <div class="d-flex gap-1">
@@ -185,20 +210,24 @@ function eventoToggle(){ //Se activa cuando clickeo una fecha especifica
                     </div>
                 </div>
             `
+           
             agendarEvento(e)
         })
-    })
-  
+    })  
 }
+
+  
 //Agendar un evento y tambien cancelar el agregar
 function agendarEvento(e){
     // Variables DOM de la ventana toggle de eventoToggle()
+    
     const eventoNombre = document.querySelector(`#eventoNombre`)
     const eventoDesde = document.querySelector(`#eventoDesde`)
     const eventoHasta = document.querySelector(`#eventoHasta`)
     const eventoDetalle = document.querySelector(`#eventoDetalle`)
     const cancelarEvento = document.querySelector(`#cancelarEvento`)
     const agregarEvento = document.querySelector(`#agregarEvento`)
+    
 
     cancelarEvento.addEventListener("click", ()=>{//Si no quiero agregar, cierro la ventana
         pestañaEvento.style.display = "none"
@@ -215,20 +244,30 @@ function agendarEvento(e){
         // Agrego el nuevo evento a la agenda
         let eventoCreado = {
             titulo: eventoNombre.value,
-            desde: desde,
-            hasta:hasta,
+            desde: desde.getTime(),
+            hasta:hasta.getTime(),
             informacion: eventoDetalle.value,
         }
-        
-        usuarioActual.agenda.push(eventoCreado)
-        sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
-        //Hago que se cierre la ventana
-        pestañaEvento.style.display = "none"
-        agendaDisplay()//Cada vez que se crea un evento se debe actualizar
-        })
-            
+        let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(eventoDesde,eventoHasta)
+        if(validaciones){
+            const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
+            if(agenda__Storage!=null){//Si estoy volviendo a iniciar sesion vuelvo a traer lo que cargué previamente
+                usuarioActual.agenda=agenda__Storage
+            }
+            usuarioActual.agenda.push(eventoCreado)
+            sessionStorage.setItem(`usuarios`, JSON.stringify(users))
+            sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+            //Hago que se cierre la ventana
+            pestañaEvento.style.display = "none"
+            agendaDisplay()//Cada vez que se crea un evento se debe actualizar
+        }else{
+            queNoEsteVacio(eventoNombre)
+            queSeaDespues(eventoDesde,eventoHasta)
+        }
+    })
 }
 
+function pintarDiv(){}
 // Cerrar sesion
 function cerrarSesion(){
     sessionStorage.removeItem("usuarioActual")
@@ -253,17 +292,18 @@ agendaButton.addEventListener("click",()=>{
     navBar.classList.remove("d-flex")      
 })
 function agendaDisplay(){
-
-    let agenda = JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
+    const agenda= usuarioActual.agenda
+    agenda.sort((a,b)=>a.desde-b.desde)
     vistaAgenda.innerHTML= ``
-    vistaAgenda.innerHTML += `    <h2>Agenda de ${usuarioActual.nombre}</h2>`
+    vistaAgenda.innerHTML += `    <h3 class="m-4 font-italic">Agenda de ${usuarioActual.nombre}</h3>`
     if (agenda!= null){
         for (let evento of agenda){ 
             vistaAgenda.innerHTML += `
-            <div class="d-flex gap-3">
-                <h3>${evento.titulo}</h3>
+            <div class="d-flex gap-3 border m-4 agenda-event-hover align-items-baseline">
                 <p>${parseDate(evento.desde).toLocaleDateString()}</p>
+                <h4>${evento.titulo}</h4>
                 <p>${hhmm(parseDate(evento.desde))} a ${hhmm(parseDate(evento.hasta))}</p>
+                <div class="trash-icon-container"></div>
                 
             </div>`
     }}
@@ -298,11 +338,13 @@ monthButton.addEventListener("click",()=>{
 // Inicializacion de funciones
 inicio()
 eventoToggle()
-
+let prueba = new Date()
+prueba.setFullYear(2023)
+prueba.setDate(2)
+console.log(prueba)
 
 // pendiente:
 
-// Validar datos del login. Que si creo el usuario me mande directo a la agenda
 // Validacion de campos en general tambien para el calendario
 // Si el evento empieza 22hs que no termine 21 hs del mismo dia. (¿Evento change de la clase de librerias? Investigar)
 // Crear eventos que duren mas de un dia. Desde y hasta tambien con la fecha y no solo horas.
@@ -315,7 +357,8 @@ eventoToggle()
 
 // Los datos que guardas en session storage, quizas deberias guardarlos en local storage, como por ejemplo los datos del registro o la agenda.
 
-// La agenda cuando guardas algo, si recargas, reemplaza lo que ya tenias. Estaria bueno que se sume y que se puedan eliminar o editar lo agregado a la agenda.
+// La agenda cuando guardas algo, si recargas, reemplaza lo que ya tenias. Estaria bueno que se sume LISTO
+//  y que se puedan eliminar o editar lo agregado a la agenda.
 // Esto es similar a lo de usuario. Cuando refresco el array interno de JS se vacia. Por eso no puede guardar lo anterior.
 
 // No deberia dejar agendar cosas para dias o horas del dia de hoy que ya pasaron, incluso podrias poner los dias que ya pasaron en un gris mas oscuro y bloquear los botones.
