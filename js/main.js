@@ -61,7 +61,7 @@ const index = document.querySelector(`#index`)
     // Storage
     const usuarioActual__storage = localStorage.getItem("usuarioActual")
     const usuarioActual = users.find((el)=> usuarioActual__storage==el.usuario)
-    const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
+    const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.usuario}`))
     usuarioActual.agenda=agenda__Storage||[]
     const parseDate = (string) =>{
         let date = new Date (string)
@@ -272,7 +272,8 @@ function agendarEvento(){
         // Validaciones de los datos (*buscar estas funciones en el archivo validaciones.js)
         let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)
         if(validaciones){
-            const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
+            const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.usuario}`))
+
             if(agenda__Storage!=null){
                 //Si estoy volviendo a iniciar sesion vuelvo a traer lo que cargué previamente
                 usuarioActual.agenda=agenda__Storage
@@ -280,7 +281,7 @@ function agendarEvento(){
             // Subo a la BBDD simulada
             usuarioActual.agenda.push(eventoCreado)
             sessionStorage.setItem(`usuarios`, JSON.stringify(users))
-            sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+            sessionStorage.setItem(`agenda de ${usuarioActual.usuario}`, JSON.stringify(usuarioActual.agenda))
             //Hago que se cierre la ventana
             pestañaEvento.style.display = "none"
             agendaDisplay()//Cada vez que se crea un evento se debe actualizar
@@ -378,7 +379,7 @@ function botonesAgenda(){
                 if(validaciones){
                 usuarioActual.agenda[eventoActual] = eventoModificado
                 sessionStorage.setItem(`usuarios`, JSON.stringify(users))
-                sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+                sessionStorage.setItem(`agenda de ${usuarioActual.usuario}`, JSON.stringify(usuarioActual.agenda))
                 // Lanzo alerta de exito
                 Swal.fire({
                     position: 'center',
@@ -407,7 +408,7 @@ function botonesAgenda(){
             usuarioActual.agenda.splice(eventoActual,1)
             // Subo los cambios a la BBDD simulada
             sessionStorage.setItem(`usuarios`, JSON.stringify(users))
-            sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+            sessionStorage.setItem(`agenda de ${usuarioActual.usuario}`, JSON.stringify(usuarioActual.agenda))
             //Actualizo
             agendaDisplay()
         })        
