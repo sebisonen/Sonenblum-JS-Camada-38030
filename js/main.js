@@ -366,11 +366,11 @@ function botonesAgenda(){
                 let hasta = new Date(añoHasta, mesHasta-1, diaHasta, horasHasta,minutosHasta,0)
                 // Creo el nuevo evento
                 let eventoModificado={
+                    titulo:eventoNombre.value||"",
                     desde:desde.getTime(),
                     hasta:hasta.getTime(),
-                    id:evento.id,
                     informacion:eventoDetalle.value||"",
-                    titulo:eventoNombre.value||""
+                    id:evento.id                    
                 }
                 // Modifico el evento
                 let eventoActual = usuarioActual.agenda.indexOf(evento)
