@@ -348,7 +348,12 @@ function botonesAgenda(){
             // funcionaliad del boton modificar
             const modificarEvento = modal.querySelector(`#modificarEvento`)
             modificarEvento.addEventListener("click",()=>{
-
+                // Variables del DOM del modal
+                const eventoNombre = document.querySelector(`#eventoNombre`)
+                const eventoDesde = document.querySelector(`#eventoDesde`)
+                const eventoHasta = document.querySelector(`#eventoHasta`)
+                const eventoDetalle = document.querySelector(`#eventoDetalle`)
+                const eventoDia = document.querySelector(`#eventoDia`)
                 // Manipulo los datos del html para armar la fecha DESDE
                 let [horasDesde, minutosDesde] = [eventoDesde.value.split(':')[0], eventoDesde.value.split(':')[1]]
                 let [añoDesde, mesDesde, diaDesde] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
