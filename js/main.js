@@ -1,6 +1,4 @@
-if(users__storage.length!=0){users=users__storage}
-
-
+if(users__storage.length!=0){users=users__storage} //IMPORTANTE PARA QUE CADA VEZ QUE SE ABRE LA VENTANA AGENDA TRAIGA LOS DATOS
 // Elementos HTML
 // index
 const index = document.querySelector(`#index`)
@@ -24,7 +22,7 @@ const index = document.querySelector(`#index`)
     const vistaCalendario = document.querySelector(`#vista-calendario`)
     const fechasCalendario = document.querySelector(`#fechasCalendario`)
 
-// Snippets y variables globales
+// Snippets y funciones globales
     // Me da el nombre entero de cualquier mes
     function monthName(fecha){
         return fecha.toLocaleDateString('default', { month: 'long' })
@@ -80,17 +78,38 @@ const index = document.querySelector(`#index`)
 // 
 
 // FUNCIONES DEL PROYECTO
+// Cerrar sesion
+function cerrarSesion(){
+    sessionStorage.removeItem("usuarioActual")
+    localStorage.removeItem("usuarioActual")
+}
+const btn_cerrarSesion = document.querySelector(`#cerrarSesion`) 
+btn_cerrarSesion.addEventListener("click", ()=>cerrarSesion())
+
+
+// VISTA MES
+// Boton para visualizar todo el contenido
+monthButton.addEventListener("click",()=>{
+    activar("month-link", "agenda-link")
+    vistaCalendario.classList.add("d-flex")
+    vistaCalendario.classList.remove("d-none")
+    vistaAgenda.classList.add("d-none")
+    vistaAgenda.classList.remove("d-block")
+    navBar.classList.add("d-flex")
+    navBar.classList.remove("d-none")
+})
+//Elementos de la vista mes
 const hoy = new Date()
 function inicio(){
-    let copiaHoy = new Date(hoy.valueOf())
+    let copiaHoy = new Date(hoy.valueOf())//Con esta voy a trabajar
     let mesActual = copiaHoy.getMonth()
     calendario(copiaHoy)//Imprimo el calendario en pantalla en base al dia de hoy
-    botonHoy.addEventListener("click",()=>{
-        copiaHoy = new Date(hoy.valueOf())
+    botonHoy.addEventListener("click",()=>{//BOTON PARA VOLVER AL DIA DE HOY
+        copiaHoy = new Date(hoy)
         mesActual = hoy.getMonth()
         calendario(copiaHoy)
     })
-    botonSiguiente.addEventListener("click",()=>{
+    botonSiguiente.addEventListener("click",()=>{//BOTON PARA MOSTRAR EL MES SIGUIENTE
         if(mesActual>=11){
             mesActual=0
             copiaHoy.setFullYear(copiaHoy.getFullYear() + 1)
@@ -100,7 +119,7 @@ function inicio(){
         copiaHoy.setMonth(mesActual)
         calendario(copiaHoy)
     })
-    botonAtras.addEventListener("click",()=>{
+    botonAtras.addEventListener("click",()=>{//BOTON PARA MOSTRAR EL DIA ANTERIOR
         if(mesActual<=0){
            mesActual=11
             copiaHoy.setFullYear(copiaHoy.getFullYear() -1)
@@ -113,7 +132,7 @@ function inicio(){
     agendaDisplay()//Cuando se abra la app que se muestre la agenda    
 }
 
-//Hago dinamico el contenido de lo que se ve en pantalla
+//Hago dinamico el contenido de lo que se ve en pantalla y defino los contenidos y funcionalidades de la vista MES
 function calendario(copiaHoy){
     mesDiv.innerText = `${monthName(copiaHoy).toUpperCase()}`
     añoDiv.innerText = `${copiaHoy.getFullYear()}`
@@ -122,10 +141,9 @@ function calendario(copiaHoy){
     resaltarHoy(hoy)
 }
 
-// Darle un detalle al dia actual
+// Resalto al dia actual
 function resaltarHoy(fecha){
     const diasCalendario = document.querySelectorAll(`.diaCalendario`)
-    
     diasCalendario.forEach((div)=>{
         if(fecha.valueOf()==div.id){
             div.classList.add("diaActual"); 
@@ -133,11 +151,11 @@ function resaltarHoy(fecha){
 }
 
 
-// Crear el calendario especifico segun las particularidades de cada mes y año
-function crearCuadricula(fecha){
-    fecha.setDate(1) //Fecha de referencia estática por cada mes: el primero de cada mes. (Explicacion: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia.9
-    hoy.setHours(0,0,0,0)
-    const copiaFecha = new Date(fecha.valueOf())// Creo una segunda variable igual a la primera: es la que va a ir cambiando en funcion de cada cuadrado-calendario
+// Creo el calendario especifico segun las particularidades de cada mes y año
+function crearCuadricula(fecha0){
+    let fecha = new Date(fecha0)//Hago una copia para no modificar el paramentro que recibo
+    fecha.setDate(1) //Fecha de referencia estática por cada mes: el primero de cada mes. (Explicacion: Si la fecha fuese 31 de enero, cuando quiera crear un calendario para el mes siguiente no voy a poder porque no hay 31 de feb, con esto elimino el dia actual como referencia)
+    const copiaFecha = new Date(fecha.valueOf())// Creo una segunda variable igual a la primera: es la que va a ir cambiando en funcion de cada cuadrado-calendario, asi mantengo sin modificar el mes cuando tengo que crear cuadrados previos
     let cuadradosPrevios = primerDia(fecha)
     let cuadradosPosteriores = 6 - ultimoDia(fecha)
     for(let i = 0, j = 1; i<daysInMonth(fecha)+cuadradosPrevios+cuadradosPosteriores; i++, j++){
@@ -151,7 +169,7 @@ function crearCuadricula(fecha){
         }else{// Para los casos que hay que crear cuadros antes
               
             copiaFecha.setDate(1)
-            if (fecha.getMonth()==0){// Creando enero (cuando se manejan dos años distintos en la creacion)
+            if (fecha.getMonth()==0){// Creando enero (cuando hay un cambio de año es un caso conflictivo por el la forma de)
                 copiaFecha.setMonth(11)
                 copiaFecha.setFullYear(fecha.getFullYear()-1)
             }
@@ -162,30 +180,35 @@ function crearCuadricula(fecha){
                     copiaFecha.setFullYear(fecha.getFullYear()+1)
                 }
         }
-        //Creo los div con sus clases correspondientes. A los anteriores al dia actual no permito agendar.
+        //Creo los div con sus clases correspondientes.
         let div = document.createElement("div");
-		div.innerHTML = `<div id="${copiaFecha.valueOf()}" class="diaCalendario border vw-10">${copiaFecha.getDate()}</div>`
+		div.innerHTML = `<div id="${copiaFecha.valueOf()}" class="diaCalendario  vw-10">${copiaFecha.getDate()}</div>`
 		fechasCalendario.appendChild(div);
-        hoy.valueOf()<=div.firstElementChild.id?div.firstElementChild.classList.add("enabled"):div.firstElementChild.classList.add("disabled")
+        //  A los dias anteriores al dia actual no permito agendar.
+        let fecha2 =new Date() //Otra copia. Me sirve para tener de referencia la hora 0 (quiero que tenga la clase enabled el div que sea durante el mismo dia)
+        fecha2.setHours(0,0,0,0)
+        fecha2.valueOf()<=div.firstElementChild.id?div.firstElementChild.classList.add("enabled"):div.firstElementChild.classList.add("disabled")
     }
     
     eventoToggle()//Abrir ventana de agendar un evento. NOTA: Si o si se inicializa aca. Sino queda por fuera de los eventos
     
 }
 
-// Cuando clickeo un div que se visualice el menu para agendar un evento
-function eventoToggle(){ //Se activa cuando clickeo una fecha especifica
+// Cuando clickeo un div que se visualice el modal para agendar un evento
+function eventoToggle(){ 
     const diasCalendario = document.querySelectorAll(`.enabled`)
-    diasCalendario.forEach((div) =>{
-        div.addEventListener("click", (e)=>{//Por cada dia del calendario creo la posibilidad de agendar un nuevo evento en aquel que clickee
+    diasCalendario.forEach((div) =>{//Se activa cuando clickeo una fecha especifica
+        div.addEventListener("click", ()=>{//Por cada dia del calendario creo la posibilidad de agendar un nuevo evento en aquel que clickee
             // Formateos de fecha para poder poner placeholders en forma de values
             let date = new Date(parseInt(div.id));
             let valueEventoDia = new Date(parseInt(div.id)).toISOString().split('T')[0]
             let value= redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             date.setHours(date.getHours() + 1)
             let value2 = redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-
-            pestañaEvento.style.display = "block"//Que se vea el menu
+            //Minimos a seleccionar
+            let eventoDiaMin= new Date().toISOString().split('T')[0]
+            //Que se vea el menu
+            pestañaEvento.style.display = "block"
             pestañaEvento.innerHTML = `
                 <div id="evento" class="d-flex flex-column justify-content-center w-100 h-100 p-3 gap-3">
                     <h2> Agende un evento </h2>
@@ -194,14 +217,12 @@ function eventoToggle(){ //Se activa cuando clickeo una fecha especifica
                         <div class="error-div text-danger"></div>
                     </div>
                     <div>
-                    <input type="date" id="eventoDia" value="${valueEventoDia}">
+                        <input type="date" id="eventoDia" value="${valueEventoDia}" min="${eventoDiaMin}">
                         <div class="error-div text-danger"></div>
                     </div>                    
                     <div class="d-flex">
                         <input type="time" id="eventoDesde" value="${value}">
-                        
                         <input type="time" id="eventoHasta" value="${value2}">
-                        
                         <div class=" mx-5 error-div text-danger"></div>
                     </div>
                     <input id="eventoDetalle" type="text" placeholder="Agregar informacion">
@@ -211,50 +232,52 @@ function eventoToggle(){ //Se activa cuando clickeo una fecha especifica
                     </div>
                 </div>
             `
-           
-            agendarEvento(e)
+            agendarEvento()
         })
     })  
 }
 
-  
 //Agendar un evento y tambien cancelar el agregar
-function agendarEvento(e){
+function agendarEvento(){
     // Variables DOM de la ventana toggle de eventoToggle()
-    
     const eventoNombre = document.querySelector(`#eventoNombre`)
     const eventoDesde = document.querySelector(`#eventoDesde`)
     const eventoHasta = document.querySelector(`#eventoHasta`)
     const eventoDetalle = document.querySelector(`#eventoDetalle`)
+    const eventoDia = document.querySelector(`#eventoDia`)
     const cancelarEvento = document.querySelector(`#cancelarEvento`)
     const agregarEvento = document.querySelector(`#agregarEvento`)
-    
-
-    cancelarEvento.addEventListener("click", ()=>{//Si no quiero agregar, cierro la ventana
+    cancelarEvento.addEventListener("click", ()=>{//BOTON PARA CERRAR EL MODAL
         pestañaEvento.style.display = "none"
     })
-    agregarEvento.addEventListener("click", ()=>{
+    agregarEvento.addEventListener("click", ()=>{// BOTON PARA AGREGAR EVENTO
         // Manipulo los datos del html para armar la fecha DESDE (lio por los tipos de datos y conversiones del objeto Date)
-        let desde=  new Date(parseInt(e.target.id))
         let [horasDesde, minutosDesde] = [eventoDesde.value.split(':')[0], eventoDesde.value.split(':')[1]]
-        desde.setHours(horasDesde,minutosDesde,0)
+        let [añoDesde, mesDesde, diaDesde] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
+        let desde= new Date(añoDesde,mesDesde-1,diaDesde,horasDesde,minutosDesde)
+    
         // Manipulo los datos del html para armar la fecha HASTA (lio por los tipos de datos y conversiones del objeto Date)
-        let hasta = new Date(parseInt(e.target.id))
         let [horasHasta, minutosHasta] = [eventoHasta.value.split(':')[0], eventoHasta.value.split(':')[1]]
-        hasta.setHours(horasHasta,minutosHasta,0)
+        let [añoHasta, mesHasta, diaHasta] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
+        let hasta = new Date(añoHasta, mesHasta-1, diaHasta, horasHasta,minutosHasta,0)
+
         // Agrego el nuevo evento a la agenda
         let eventoCreado = {
             titulo: eventoNombre.value,
             desde: desde.getTime(),
             hasta:hasta.getTime(),
             informacion: eventoDetalle.value,
+            id: parseInt(Math.random()*100000)
         }
-        let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(eventoDesde,eventoHasta)
+        // Validaciones de los datos (*buscar estas funciones en el archivo validaciones.js)
+        let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)
         if(validaciones){
             const agenda__Storage=JSON.parse(sessionStorage.getItem(`agenda de ${usuarioActual.nombre}`))
-            if(agenda__Storage!=null){//Si estoy volviendo a iniciar sesion vuelvo a traer lo que cargué previamente
+            if(agenda__Storage!=null){
+                //Si estoy volviendo a iniciar sesion vuelvo a traer lo que cargué previamente
                 usuarioActual.agenda=agenda__Storage
             }
+            // Subo a la BBDD simulada
             usuarioActual.agenda.push(eventoCreado)
             sessionStorage.setItem(`usuarios`, JSON.stringify(users))
             sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
@@ -262,27 +285,14 @@ function agendarEvento(e){
             pestañaEvento.style.display = "none"
             agendaDisplay()//Cada vez que se crea un evento se debe actualizar
         }else{
-            queNoEsteVacio(eventoNombre)
-            queSeaDespues(eventoDesde,eventoHasta)
+            // Estas validaciones estan hechas sin efectos secundarios en el dom ya que uso la misma funcion para mas de un caso y resultaria dificil que no se sobreescriban las validaciones
+            queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)?eliminarDivError(eventoDesde):noModificarDivError(eventoDesde)
+            queSeaDespues(desde,hasta)?noModificarDivError(eventoDesde):crearDivError(eventoDesde, `El evento debe terminar luego de haber empezado`)
+            queSeaDespues(new Date(),desde)?noModificarDivError(eventoDesde):crearDivError(eventoDesde, `No se puede empezar un evento previo al momento actual`)
         }
     })
 }
-
-function pintarDiv(){}
-// Cerrar sesion
-function cerrarSesion(){
-    sessionStorage.removeItem("usuarioActual")
-    localStorage.removeItem("usuarioActual")
-
-}
-const btn_cerrarSesion = document.querySelector(`#cerrarSesion`) 
-btn_cerrarSesion.addEventListener("click", ()=>cerrarSesion())
-
-
-// Distintas vistas:
-
-// Vista agenda
-
+// VISTA AGENDA
 agendaButton.addEventListener("click",()=>{
     activar("agenda-link", "month-link")
     vistaCalendario.classList.add("d-none")
@@ -294,54 +304,149 @@ agendaButton.addEventListener("click",()=>{
 })
 function agendaDisplay(){
     const agenda= usuarioActual.agenda
+    // Ordeno la agenda para poder visualizar desde lo mas proximo a lo mas lejano
     agenda.sort((a,b)=>a.desde-b.desde)
+    // Vacío para eliminar rastros que pueden haber quedado de otros efectos secundarios
     vistaAgenda.innerHTML= ``
+    // Y visualizo los distintos eventos que hayan sido agendados
     vistaAgenda.innerHTML += `    <h3 class="m-4 font-italic">Agenda de ${usuarioActual.nombre}</h3>`
     if (agenda!= null){
-        for (let evento of agenda){ 
+        for (let evento of agenda){ //Recorro la agenda y voy pintando 
             vistaAgenda.innerHTML += `
-            <div class="d-flex gap-3 border m-4 agenda-event-hover align-items-baseline">
-                <p>${parseDate(evento.desde).toLocaleDateString()}</p>
-                <h4>${evento.titulo}</h4>
-                <p>${hhmm(parseDate(evento.desde))} a ${hhmm(parseDate(evento.hasta))}</p>
-                <div class="trash-icon-container"></div>
+            <div id="${evento.id}"class="elementoAgenda d-flex border rounded m-4 agenda-event-hover align-items-baseline justify-content-between" >
+                <div class="d-flex gap-4 align-items-baseline"> 
+                    <div>${parseDate(evento.desde).toLocaleDateString()}</div>
+                    <h4>${evento.titulo}</h4>
+                    <div>${hhmm(parseDate(evento.desde))} a ${hhmm(parseDate(evento.hasta))}</div>
+                    <p> ${evento.informacion}</p>
+                </div>
+                <div class="d-flex gap-4 ">
+                    <button id=""class="editarEvento bg-transparent border-0"><img width="20px" src="../icons/edit-icon.svg" /></button>
+                    
+                    <button id="" class="eliminarEvento bg-transparent border-0"><img width="16px" src="../icons/cross-icon.svg" /></button>
+                </div>
                 
             </div>`
     }}
+    
+    botonesAgenda()//Le doy funcionalidad a cada boton de cada div
 
 }
-// Vista mes
-monthButton.addEventListener("click",()=>{
-    activar("month-link", "agenda-link")
-    vistaCalendario.classList.add("d-flex")
-    vistaCalendario.classList.remove("d-none")
-    vistaAgenda.classList.add("d-none")
-    vistaAgenda.classList.remove("d-block")
-    navBar.classList.add("d-flex")
-    navBar.classList.remove("d-none")
-})
+
+function botonesAgenda(){
+    const elementosAgenda= document.querySelectorAll(`.elementoAgenda`)
+    elementosAgenda.forEach((div)=>{//Por cada div que contenga la info de un evento voy a dar funcionalidad a los botones
+        // Editar evento:
+        const editarEvento= div.querySelector(`.editarEvento`)
+        let evento = usuarioActual.agenda.find((el)=>el.id == parseInt(div.id))
+        editarEvento.addEventListener("click", ()=>{
+            // Creo un modal
+            const modal = crearModal(evento, div)
+            // funcionalidad del boton No Modificar
+            const noModificarEvento = modal.querySelector(`#noModificarEvento`)
+            noModificarEvento.addEventListener("click", ()=>modal.remove())
+            // funcionaliad del boton modificar
+            const modificarEvento = modal.querySelector(`#modificarEvento`)
+            modificarEvento.addEventListener("click",()=>{
+
+                // Manipulo los datos del html para armar la fecha DESDE
+                let [horasDesde, minutosDesde] = [eventoDesde.value.split(':')[0], eventoDesde.value.split(':')[1]]
+                let [añoDesde, mesDesde, diaDesde] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
+                let desde= new Date(añoDesde,mesDesde-1,diaDesde,horasDesde,minutosDesde)
+            
+                // Manipulo los datos del html para armar la fecha HASTA
+                let [horasHasta, minutosHasta] = [eventoHasta.value.split(':')[0], eventoHasta.value.split(':')[1]]
+                let [añoHasta, mesHasta, diaHasta] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
+                let hasta = new Date(añoHasta, mesHasta-1, diaHasta, horasHasta,minutosHasta,0)
+                // Creo el nuevo evento
+                let eventoModificado={
+                    desde:desde.getTime(),
+                    hasta:hasta.getTime(),
+                    id:evento.id,
+                    informacion:eventoDetalle.value||"",
+                    titulo:eventoNombre.value||""
+                }
+                // Modifico el evento
+                let eventoActual = usuarioActual.agenda.indexOf(evento)
+                //Validaciones
+                let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)
+                if(validaciones){
+                usuarioActual.agenda[eventoActual] = eventoModificado
+                sessionStorage.setItem(`usuarios`, JSON.stringify(users))
+                sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+                // Lanzo alerta de exito
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Evento modificado con exito',
+                    showConfirmButton: true,
+                    confirmButtonColor: "#000000c1",
+        
+                })   
+                //Hago que se cierre la ventana
+                agendaDisplay()//// Actualizo la vista
+                }else{
+                    // Estas validaciones estan hechas sin efectos secundarios en el dom ya que se usa la misma funcion para mas de un caso. Y resulta conflictivo
+                    queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)?eliminarDivError(eventoDesde):noModificarDivError(eventoDesde)
+                    queSeaDespues(desde,hasta)?noModificarDivError(eventoDesde):crearDivError(eventoDesde, `El evento debe terminar luego de haber empezado`)
+                    queSeaDespues(new Date(),desde)?noModificarDivError(eventoDesde):crearDivError(eventoDesde, `No se puede empezar un evento previo al momento actual`)
+                }
+            })
+        })
+        
+        // eliminar evento
+        const eliminarEvento =div.querySelector(`.eliminarEvento`)
+        eliminarEvento.addEventListener("click", ()=>{
+            let eventoActual = usuarioActual.agenda.indexOf(evento)
+            // Elimino
+            usuarioActual.agenda.splice(eventoActual,1)
+            // Subo los cambios a la BBDD simulada
+            sessionStorage.setItem(`usuarios`, JSON.stringify(users))
+            sessionStorage.setItem(`agenda de ${usuarioActual.nombre}`, JSON.stringify(usuarioActual.agenda))
+            //Actualizo
+            agendaDisplay()
+        })        
+    })
+}
+
+function crearModal(evento, div){//Creo el modal para modificar el evento deseado
+    let modal = document.createElement("div")
+    let eventoDia = new Date(parseInt(evento.desde)).toISOString().split('T')[0]
+    modal.innerHTML = `
+                        <div id="evento" class="d-flex flex-column justify-content-center w-100 h-100 p-3 gap-3">
+                        <h4> Editar evento </h4>
+                        <div>
+                            <input type="text" id="eventoNombre" value="${evento.titulo}">
+                            <div class="error-div text-danger"></div>
+                        </div>
+                        <div>
+                            <input type="date" id="eventoDia" value="${eventoDia}" >
+                            <div class="error-div text-danger"></div>
+                        </div>                    
+                        <div class="d-flex">
+                            <input type="time" id="eventoDesde" value="${hhmm(parseDate(evento.desde))}" >
+                            <input type="time" id="eventoHasta" value="${hhmm(parseDate(evento.hasta))}">
+                            <div class=" mx-5 error-div text-danger"></div>
+                        </div>
+                        <input id="eventoDetalle" type="text" value="${evento.informacion}">
+                        <div class="d-flex gap-1">
+                            <button id="modificarEvento" class="boton rounded">Modificar</button>
+                            <button id="noModificarEvento" class="btn-dark rounded">Cancelar</button>
+                        </div>
+                    </div>
+                        `
+    div.appendChild(modal)
+    return modal
+
+}
+
 
 // Inicializacion de funciones
 inicio()
 eventoToggle()
 
-
-// pendiente:
-
-// Validacion de campos en general tambien para el calendario
-// Si el evento empieza 22hs que no termine 21 hs del mismo dia. (¿Evento change de la clase de librerias? Investigar)
+// A futuro:
+// Si entras directo a la url de la agenda sin estar logueado, no deberia dejarte, podes hacer una redireccion. NO SE COMO HACER ESTO
+// Eliminar usuarios
 // Crear eventos que duren mas de un dia. Desde y hasta tambien con la fecha y no solo horas.
-// Interconexion entre usuarios. Distintas funcionalidades: agregar amigo (buscador de usuarios). Crear evento con mi amigo, etc
-// Eliminar eventos y usuarios
-
-
-// CORRECCION:
-// Si entras directo a la url de la agenda sin estar logueado, no deberia dejarte, podes hacer una redireccion.
-
-// Los datos que guardas en session storage, quizas deberias guardarlos en local storage, como por ejemplo los datos del registro o la agenda.
-
-// La agenda cuando guardas algo, si recargas, reemplaza lo que ya tenias. Estaria bueno que se sume LISTO
-//  y que se puedan eliminar o editar lo agregado a la agenda.
-// Esto es similar a lo de usuario. Cuando refresco el array interno de JS se vacia. Por eso no puede guardar lo anterior.
-
-// No deberia dejar agendar cosas para dias o horas del dia de hoy que ya pasaron, incluso podrias poner los dias que ya pasaron en un gris mas oscuro y bloquear los botones.
+// Interconexion entre usuarios. Distintas funcionalidades: agregar amigo (buscador de usuarios). Crear evento con mi amigo, etc. NO SE HACER ESTO. DEBERIA INVESTIGAR COMO CREAR UNA BBDD CON LOS DATOS QUE TENGO

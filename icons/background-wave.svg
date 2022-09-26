@@ -1,0 +1,89 @@
+<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 600" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><style>
+          .path-0{
+            animation:pathAnim-0 4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+          @keyframes pathAnim-0{
+            0%{
+              d: path("M 0,600 C 0,600 0,120 0,120 C 237,99.5 474,79 714,79 C 954,79 1197,99.5 1440,120 C 1440,120 1440,600 1440,600 Z");
+            }
+            25%{
+              d: path("M 0,600 C 0,600 0,120 0,120 C 242.5,137.5 485,155 725,155 C 965,155 1202.5,137.5 1440,120 C 1440,120 1440,600 1440,600 Z");
+            }
+            50%{
+              d: path("M 0,600 C 0,600 0,120 0,120 C 306,117 612,114 852,114 C 1092,114 1266,117 1440,120 C 1440,120 1440,600 1440,600 Z");
+            }
+            75%{
+              d: path("M 0,600 C 0,600 0,120 0,120 C 250,122 500,124 740,124 C 980,124 1210,122 1440,120 C 1440,120 1440,600 1440,600 Z");
+            }
+            100%{
+              d: path("M 0,600 C 0,600 0,120 0,120 C 237,99.5 474,79 714,79 C 954,79 1197,99.5 1440,120 C 1440,120 1440,600 1440,600 Z");
+            }
+          }</style><defs><linearGradient id="gradient" x1="1%" y1="41%" x2="99%" y2="59%"><stop offset="5%" stop-color="#abb8c3"></stop><stop offset="95%" stop-color="#abb8c3"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,120 0,120 C 237,99.5 474,79 714,79 C 954,79 1197,99.5 1440,120 C 1440,120 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.265" class="transition-all duration-300 ease-in-out delay-150 path-0"></path><style>
+          .path-1{
+            animation:pathAnim-1 4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+          @keyframes pathAnim-1{
+            0%{
+              d: path("M 0,600 C 0,600 0,240 0,240 C 224,228.5 448,217 688,217 C 928,217 1184,228.5 1440,240 C 1440,240 1440,600 1440,600 Z");
+            }
+            25%{
+              d: path("M 0,600 C 0,600 0,240 0,240 C 240,254 480,268 720,268 C 960,268 1200,254 1440,240 C 1440,240 1440,600 1440,600 Z");
+            }
+            50%{
+              d: path("M 0,600 C 0,600 0,240 0,240 C 256.5,227.5 513,215 753,215 C 993,215 1216.5,227.5 1440,240 C 1440,240 1440,600 1440,600 Z");
+            }
+            75%{
+              d: path("M 0,600 C 0,600 0,240 0,240 C 245,256 490,272 730,272 C 970,272 1205,256 1440,240 C 1440,240 1440,600 1440,600 Z");
+            }
+            100%{
+              d: path("M 0,600 C 0,600 0,240 0,240 C 224,228.5 448,217 688,217 C 928,217 1184,228.5 1440,240 C 1440,240 1440,600 1440,600 Z");
+            }
+          }</style><defs><linearGradient id="gradient" x1="1%" y1="41%" x2="99%" y2="59%"><stop offset="5%" stop-color="#abb8c3"></stop><stop offset="95%" stop-color="#abb8c3"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,240 0,240 C 224,228.5 448,217 688,217 C 928,217 1184,228.5 1440,240 C 1440,240 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.4" class="transition-all duration-300 ease-in-out delay-150 path-1"></path><style>
+          .path-2{
+            animation:pathAnim-2 4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+          @keyframes pathAnim-2{
+            0%{
+              d: path("M 0,600 C 0,600 0,360 0,360 C 205,361 410,362 650,362 C 890,362 1165,361 1440,360 C 1440,360 1440,600 1440,600 Z");
+            }
+            25%{
+              d: path("M 0,600 C 0,600 0,360 0,360 C 253,363 506,366 746,366 C 986,366 1213,363 1440,360 C 1440,360 1440,600 1440,600 Z");
+            }
+            50%{
+              d: path("M 0,600 C 0,600 0,360 0,360 C 220.5,368.5 441,377 681,377 C 921,377 1180.5,368.5 1440,360 C 1440,360 1440,600 1440,600 Z");
+            }
+            75%{
+              d: path("M 0,600 C 0,600 0,360 0,360 C 260.5,340 521,320 761,320 C 1001,320 1220.5,340 1440,360 C 1440,360 1440,600 1440,600 Z");
+            }
+            100%{
+              d: path("M 0,600 C 0,600 0,360 0,360 C 205,361 410,362 650,362 C 890,362 1165,361 1440,360 C 1440,360 1440,600 1440,600 Z");
+            }
+          }</style><defs><linearGradient id="gradient" x1="1%" y1="41%" x2="99%" y2="59%"><stop offset="5%" stop-color="#abb8c3"></stop><stop offset="95%" stop-color="#abb8c3"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,360 0,360 C 205,361 410,362 650,362 C 890,362 1165,361 1440,360 C 1440,360 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-2"></path><style>
+          .path-3{
+            animation:pathAnim-3 4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+          }
+          @keyframes pathAnim-3{
+            0%{
+              d: path("M 0,600 C 0,600 0,480 0,480 C 288,486.5 576,493 816,493 C 1056,493 1248,486.5 1440,480 C 1440,480 1440,600 1440,600 Z");
+            }
+            25%{
+              d: path("M 0,600 C 0,600 0,480 0,480 C 221.5,496.5 443,513 683,513 C 923,513 1181.5,496.5 1440,480 C 1440,480 1440,600 1440,600 Z");
+            }
+            50%{
+              d: path("M 0,600 C 0,600 0,480 0,480 C 206,463.5 412,447 652,447 C 892,447 1166,463.5 1440,480 C 1440,480 1440,600 1440,600 Z");
+            }
+            75%{
+              d: path("M 0,600 C 0,600 0,480 0,480 C 275,489 550,498 790,498 C 1030,498 1235,489 1440,480 C 1440,480 1440,600 1440,600 Z");
+            }
+            100%{
+              d: path("M 0,600 C 0,600 0,480 0,480 C 288,486.5 576,493 816,493 C 1056,493 1248,486.5 1440,480 C 1440,480 1440,600 1440,600 Z");
+            }
+          }</style><defs><linearGradient id="gradient" x1="1%" y1="41%" x2="99%" y2="59%"><stop offset="5%" stop-color="#abb8c3"></stop><stop offset="95%" stop-color="#abb8c3"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,480 0,480 C 288,486.5 576,493 816,493 C 1056,493 1248,486.5 1440,480 C 1440,480 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-3"></path></svg>

@@ -1,4 +1,4 @@
-
+// Variables DOM
 const registerButton = document.querySelector(`#register-button`);
 const registerLink = document.querySelector(`#register-link`)
 const registerForm = document.querySelector(`#pills-register`)
@@ -6,9 +6,10 @@ const loginButton = document.querySelector(`#login-button`);
 const loginForm = document.querySelector(`#pills-login`)
 const tabLogin =document.querySelector(`#tab-login`)
 
-if(users__storage!=null){users=users__storage}
+if(users__storage!=null){users=users__storage}//IMPORTANTE PARA QUE CADA VEZ QUE SE ABRE LA VENTANA/REFRESQUE SE TRAIGAN LOS DATOS
+// Elementos HTML
 
-// Index: Botones y display de los formularios
+// Index: Botones para el display de los formularios
 function activar(divMostrarID, divOcultarID){
     let divMostrar = document.querySelector(`#${divMostrarID}`)
     let divOcultar = document.querySelector(`#${divOcultarID}`)
@@ -62,7 +63,7 @@ signIn.addEventListener("click", (e)=>{
             sessionStorage.setItem("usuarioActual", usuario.usuario)
         }
         window.location.href='html/agenda.html'
-    }else{
+    }else{//Si el usuario es incorrecto lanzo una alerta
         Swal.fire({
             position: 'center',
             icon: 'error',
@@ -79,8 +80,8 @@ const registerInputs = registerForm.querySelectorAll(`input`)
 // Event para el boton de signUP:
 signUp.addEventListener("click", (e)=>{
     e.preventDefault()
+    // Valido los datos ingresados por el usuario
     let validacion = validarNombre(registerName)&&validarUsuario(registerUsername)&&validarEmail(registerEmail) && validarContraseña(registerPassword) && validarContraseñaRepetida(registerRepeatPassword)
-
     if (validacion){
         // Cargar a base de datos el usuario
         let nuevoUsuario = new User (registerName.value.replace(/\s+/g,' ').trim(),
@@ -89,7 +90,7 @@ signUp.addEventListener("click", (e)=>{
                                     registerPassword.value)
         users.push(nuevoUsuario)
         sessionStorage.setItem("usuarios", JSON.stringify(users))
-        // Mostrar alerta
+        // Mostrar alerta de operacion exitosa
         Swal.fire({
             position: 'center',
             icon: 'success',
@@ -113,7 +114,6 @@ signUp.addEventListener("click", (e)=>{
             campoVacio(elementoHTML.firstElementChild)?crearDivError(elementoHTML.firstElementChild, `Este campo es obligatorio`):noModificarDivError(elementoHTML)
             !huboError(elementoHTML.firstElementChild)?eliminarDivError(elementoHTML.firstElementChild):noModificarDivError(elementoHTML)
         })
-    
     }
 })
 
@@ -141,7 +141,6 @@ function datosTesimonios(){
         .catch((error)=>console.error("Se produjo un error: ", error))
 }
 
-
 function crearCardsTestimonios(){
     db.forEach((e)=>{
         // Por cada uno creo un div
@@ -161,25 +160,3 @@ function crearCardsTestimonios(){
     })
 }
 datosTesimonios()
-// Prueba con fetch
-
-fetch('https://jsonplaceholder.typicode.com/posts', {
-  method: 'POST',
-  body: JSON.stringify(users),
-  headers: {
-    'Content-type': 'application/json; charset=UTF-8',
-  },
-})
-  .then((response) => response.json())
-  .then((json) => console.log("fetch post: users", json));
-
-  let usersPRUEBA =[]
-  fetch('https://jsonplaceholder.typicode.com/posts') 
-        .then((response) =>  response.json()) 
-        .then((data) =>{
-            usersPRUEBA = data 
-            console.log(`fetch get: users: ${usersPRUEBA}`)           
-        })
-        .catch((error)=>console.error("Se produjo un error: ", error))
-
-

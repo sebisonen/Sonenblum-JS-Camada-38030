@@ -9,11 +9,8 @@
     <script defer src="js/validaciones.js"></script>
     <script defer src="js/logIn.js"></script>
     <script defer src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <link rel="stylesheet" href="css/agenda.css">
-    
-    <!-- <script defer src="../js/main.js"></script> -->
-    <title>Document</title>
+    <title>Y(Our) Agenda</title>
 </head>
 <body id="login">
   <h1 class="text-center py-3">Y(Our) Agenda</h1>
@@ -41,7 +38,7 @@
       
       <!-- Email input -->
       <div class="form-outline mb-4">
-        <input type="email" id="loginName" class="form-control" />
+        <input type="text" id="loginName" class="form-control" />
         <label class="form-label" for="loginName">Email o usuario</label>
       </div>
 
@@ -60,11 +57,11 @@
             <label class="form-check-label" for="loginCheck"> Recuerdame </label>
           </div>
         </div>
-
+<!-- 
         <div class="col-md-6 d-flex justify-content-center">
-          <!-- Simple link -->
+
           <a href="#!">Olvidé mi contraseña</a>
-        </div>
+        </div> -->
       </div>
 
       <!-- Submit button -->
@@ -86,7 +83,7 @@
     <form id="registerForm">
           <!-- Name input -->
       <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control" />
+        <input type="text" id="registerName" class="form-control" value="Sebastian Sonenblum" />
         <label class="form-label" for="registerName">Nombre completo</label>
         <div class="error-div text-danger"></div>
       </div>
@@ -95,40 +92,40 @@
 
       <!-- Username input -->
       <div class="form-outline mb-4">
-        <input required type="text" id="registerUsername" class="form-control" />
+        <input required type="text" id="registerUsername" class="form-control" value="sebisonen" />
         <label class="form-label" for="registerUsername">Usuario</label>
         <div class="error-div text-danger"></div>
       </div>
 
       <!-- Email input -->
       <div class="form-outline mb-4">
-        <input required type="email" id="registerEmail" class="form-control"  />
+        <input required type="email" id="registerEmail" class="form-control" value="sebisonen@proyectofinal.com" />
         <label class="form-label" for="registerEmail">Email</label>
         <div class="error-div text-danger"></div>
       </div>
 
       <!-- Password input -->
       <div class="form-outline mb-4">
-        <input required type="password" id="registerPassword" class="form-control" />
+        <input required type="password" id="registerPassword" class="form-control" value="121212" />
         <label class="form-label" for="registerPassword">Contraseña</label>
         <div class="error-div text-danger"></div>
       </div>
 
       <!-- Repeat Password input -->
       <div class="form-outline mb-4">
-        <input required type="password" id="registerRepeatPassword" class="form-control" />
+        <input required type="password" id="registerRepeatPassword" class="form-control" value="121212" />
         <label class="form-label" for="registerRepeatPassword">Repetir contraseña</label>
         <div class="error-div text-danger"></div>
       </div>
 
       <!-- Checkbox -->
-      <div class="form-check d-flex justify-content-center mb-4">
+      <!-- <div class="form-check d-flex justify-content-center mb-4">
         <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
           aria-describedby="registerCheckHelpText" />
         <label class="form-check-label" for="registerCheck">
           He leído y acepto los terminos y condiciones
         </label>
-      </div>
+      </div> -->
 
       <!-- Submit button -->
       <button type="submit" id= "signUp-button"class="boton btn mb-3">Registrarse</button>

@@ -9,29 +9,33 @@
     <link rel="stylesheet" href="../css/agenda.css">
     <script defer src="../js/validaciones.js"></script>
     <script defer src="../js/db.js"></script> 
-    <script defer src="../js/main.js"></script> 
+    <script defer src="../js/main.js"></script>
+    <script defer src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     
 </head>
 <body id="index">
-    <button id="cerrarSesion"><a href="../index.html">Cerrar Sesion</a></button>
+  
+  <nav class="navbar navbar-light bg-light align-items-baseline justify-content-between px-5">
+    <p class="navbar-brand" href="#">
+      <img src="../icons/logo-icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      (our)
+    </p>
     <ul class="nav nav-pills flex-nowrap d-flex justify-content-center">
       <li id="month-button"class="nav-item">
         <a id="month-link"class="nav-link active" href="#" >Mes</a>
       </li>
-      <!-- <li id="year-button"class="nav-item">
-        <a id="year-link"class="nav-link " href="#">Año</a>
-      </li>
-      <li id="week-button"class="nav-item">
-        <a id="week-link"class="nav-link" href="#">Semana</a>
-      </li> -->
       <li id="agenda-button"class="nav-item">
         <a id="agenda-link"class="nav-link " href="#">Agenda</a>
       </li>            
     </ul>
+    <button id="cerrarSesion" class="bg-transparent border-0 "><a href="../index.html" class="boton round">Cerrar Sesion</a></button>
+  </nav>
+
+  <div id="vistas-container"class="border">  
     <nav id="nav-bar"class="d-flex justify-content-between align-items-end calendarBar">
         <div class=" w-35 d-flex align-items-baseline">
-            <div id="año-titulo"  class="" ></div>
-            <div id="mes-titulo" class=""></div>
+            <div id="año-titulo"></div>
+            <div id="mes-titulo"></div>
         </div>
 
         <div class="w-35 text-end">
@@ -55,15 +59,9 @@
         <div id="fechasCalendario" class="vw-70 d-flex flex-row  m-2 flex-wrap text-center "></div>
     </div>
     <div id="pestañaEvento" class="border shadow-lg "></div>
-    <div id="vista-agenda" class="d-none" >
-        <!-- <h2>Agenda de ${usuarioActual.nombre}</h2>
-        <div class="d-flex gap-3">
-            <p>25 de Agosto</p>
-            <p>20:30 a 22:30</p>
-            <p>La Rosalia: motomami motomami eheh</p>
-        </div> -->
-    </div>
-
+    <div id="vista-agenda" class="d-none" ></div>
+    
+  </div>
      <!-- <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.0/build/global/luxon.min.js"></> -->
 </body>
 </html>

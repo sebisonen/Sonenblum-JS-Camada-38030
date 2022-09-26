@@ -94,10 +94,10 @@ function queNoEsteVacio(elementoHTML){
     validacion?eliminarDivError(elementoHTML):noModificarDivError(elementoHTML)
     return validacion
 }
-function queSeaDespues(elementoHTML1,elementoHTML2){
+
+function queSeaDespues(desde,hasta){
     let validacion
-    elementoHTML1.value>elementoHTML2.value?validacion=false:validacion=true
-    crearDivError(elementoHTML1,"El evento debe terminar luego de haber empezado")
-    validacion?eliminarDivError(elementoHTML1):noModificarDivError(elementoHTML1)
+    desde<hasta?validacion=true:validacion=false
     return validacion
 }
+
