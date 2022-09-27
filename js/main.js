@@ -52,6 +52,15 @@ const index = document.querySelector(`#index`)
     const hhmm = (fecha)=>{
         return fecha.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
     }
+    function yyyyMMdd(fecha){
+    let copiaFecha = new Date(fecha.valueOf())
+    let año = copiaFecha.toLocaleString("default", { year: "numeric" });
+    let mes = copiaFecha.toLocaleString("default", { month: "2-digit" });
+    let dia = copiaFecha.toLocaleString("default", { day: "2-digit" });
+    let fechaString = año + "-" + mes + "-" + dia;
+    return fechaString
+    }
+
     function redondearA15Minutos(fecha) {
         const minutos = 15;
         const ms = 1000 * 60 * minutos;
@@ -201,7 +210,7 @@ function eventoToggle(){
         div.addEventListener("click", ()=>{//Por cada dia del calendario creo la posibilidad de agendar un nuevo evento en aquel que clickee
             // Formateos de fecha para poder poner placeholders en forma de values
             let date = new Date(parseInt(div.id));
-            let valueEventoDia = new Date(parseInt(div.id)).toISOString().split('T')[0]
+            let valueEventoDia = yyyyMMdd(new Date(parseInt(div.id)))
             let value= redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             date.setHours(date.getHours() + 1)
             let value2 = redondearA15Minutos(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
@@ -391,7 +400,7 @@ function botonesAgenda(){
                     confirmButtonColor: "#000000c1",
                     
                 })   
-                console.log()
+                
                 //Hago que se cierre la ventana
                 agendaDisplay()//// Actualizo la vista
                 }else{
@@ -420,7 +429,8 @@ function botonesAgenda(){
 
 function crearModal(evento, div){//Creo el modal para modificar el evento deseado
     let modal = document.createElement("div")
-    let eventoDia = new Date(parseInt(evento.desde)).toISOString().split('T')[0]
+    // let eventoDia = new Date(parseInt(evento.desde)).toISOString().split('T')[0]
+    let eventoDia = yyyyMMdd(new Date(parseInt(evento.desde)))
     modal.innerHTML = `
                         <div id="evento" class="d-flex flex-column justify-content-center w-100 h-100 p-3 gap-3">
                         <h4> Editar evento </h4>
