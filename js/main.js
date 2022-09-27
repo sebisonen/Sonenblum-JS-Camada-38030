@@ -350,11 +350,11 @@ function botonesAgenda(){
             const modificarEvento = modal.querySelector(`#modificarEvento`)
             modificarEvento.addEventListener("click",()=>{
                 // Variables del DOM del modal
-                const eventoNombre = document.querySelector(`#eventoNombre`)
-                const eventoDesde = document.querySelector(`#eventoDesde`)
-                const eventoHasta = document.querySelector(`#eventoHasta`)
-                const eventoDetalle = document.querySelector(`#eventoDetalle`)
-                const eventoDia = document.querySelector(`#eventoDia`)
+                const eventoNombre = div.querySelector(`#eventoNombre`)
+                const eventoDesde = div.querySelector(`#eventoDesde`)
+                const eventoHasta = div.querySelector(`#eventoHasta`)
+                const eventoDetalle = div.querySelector(`#eventoDetalle`)
+                const eventoDia = div.querySelector(`#eventoDia`)
                 // Manipulo los datos del html para armar la fecha DESDE
                 let [horasDesde, minutosDesde] = [eventoDesde.value.split(':')[0], eventoDesde.value.split(':')[1]]
                 let [añoDesde, mesDesde, diaDesde] = [eventoDia.value.split('-')[0],eventoDia.value.split('-')[1],eventoDia.value.split('-')[2]]
@@ -377,7 +377,9 @@ function botonesAgenda(){
                 //Validaciones
                 let validaciones= queNoEsteVacio(eventoNombre)&&queSeaDespues(desde,hasta)&&queSeaDespues(new Date(),desde)
                 if(validaciones){
-                usuarioActual.agenda[eventoActual] = eventoModificado
+                
+                usuarioActual.agenda.splice(eventoActual,1)
+                usuarioActual.agenda.push(eventoModificado)
                 sessionStorage.setItem(`usuarios`, JSON.stringify(users))
                 sessionStorage.setItem(`agenda de ${usuarioActual.usuario}`, JSON.stringify(usuarioActual.agenda))
                 // Lanzo alerta de exito
@@ -387,8 +389,9 @@ function botonesAgenda(){
                     title: 'Evento modificado con exito',
                     showConfirmButton: true,
                     confirmButtonColor: "#000000c1",
-        
+                    
                 })   
+                console.log()
                 //Hago que se cierre la ventana
                 agendaDisplay()//// Actualizo la vista
                 }else{
